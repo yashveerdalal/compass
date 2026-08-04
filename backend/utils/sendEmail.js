@@ -1,18 +1,11 @@
-const nodemailer = require("nodemailer");
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  family: 4,
-});
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendVerificationEmail = async (to, token) => {
   const verifyUrl = `https://compass-riu7.onrender.com/api/auth/verify/${token}`;
-  await transporter.sendMail({
-    from: `"Compass 🧭" <${process.env.EMAIL_USER}>`,
+
+  const { data, error } = await resend.emails.send({
+    from: "Compass 🧭 <onboarding@resend.dev>",
     to,
     subject: "Verify your Compass account",
     html: `
@@ -26,6 +19,13 @@ const sendVerificationEmail = async (to, token) => {
       </div>
     `,
   });
+
+  if (error) {
+    console.error("Resend error:", error);
+    throw new Error(error.message || "Failed to send verification email");
+  }
+
+  return data;
 };
 
 module.exports = sendVerificationEmail;
