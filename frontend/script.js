@@ -17,16 +17,16 @@ const reportLoginLink = document.getElementById("reportLoginLink");
 // DOM Elements - Auth Modals & Buttons
 const loginModal = document.getElementById("loginModal");
 const registerModal = document.getElementById("registerModal");
-const resendModal = document.getElementById("resendModal");
+const deleteAccountModal = document.getElementById("deleteAccountModal");
 const openLoginBtn = document.getElementById("openLoginBtn");
 const openRegisterBtn = document.getElementById("openRegisterBtn");
-const openResendBtn = document.getElementById("openResendBtn");
+const openDeleteAccountBtn = document.getElementById("openDeleteAccountBtn");
 const closeLogin = document.getElementById("closeLogin");
 const closeRegister = document.getElementById("closeRegister");
-const closeResend = document.getElementById("closeResend");
+const closeDeleteAccount = document.getElementById("closeDeleteAccount");
 const loginForm = document.getElementById("loginForm");
 const registerForm = document.getElementById("registerForm");
-const resendForm = document.getElementById("resendForm");
+const deleteAccountForm = document.getElementById("deleteAccountForm");
 const authLoggedOut = document.getElementById("authLoggedOut");
 const authLoggedIn = document.getElementById("authLoggedIn");
 const userGreeting = document.getElementById("userGreeting");
@@ -64,11 +64,8 @@ openRegisterBtn.addEventListener("click", () => openModal(registerModal));
 closeLogin.addEventListener("click", () => closeModal(loginModal));
 closeRegister.addEventListener("click", () => closeModal(registerModal));
 
-openResendBtn.addEventListener("click", () => {
-  closeModal(loginModal);
-  openModal(resendModal);
-});
-closeResend.addEventListener("click", () => closeModal(resendModal));
+openDeleteAccountBtn.addEventListener("click", () => openModal(deleteAccountModal));
+closeDeleteAccount.addEventListener("click", () => closeModal(deleteAccountModal));
 
 reportLoginLink.addEventListener("click", () => openModal(loginModal));
 
@@ -76,13 +73,13 @@ reportLoginLink.addEventListener("click", () => openModal(loginModal));
 window.addEventListener("click", (e) => {
   if (e.target === loginModal) closeModal(loginModal);
   if (e.target === registerModal) closeModal(registerModal);
-  if (e.target === resendModal) closeModal(resendModal);
+  if (e.target === deleteAccountModal) closeModal(deleteAccountModal);
 });
 
 // Close on Escape
 window.addEventListener("keydown", (e) => {
   if (e.key !== "Escape") return;
-  [loginModal, registerModal, resendModal].forEach((m) => closeModal(m));
+  [loginModal, registerModal, deleteAccountModal].forEach((m) => closeModal(m));
 });
 
 // Update UI based on logged-in user state
@@ -153,25 +150,35 @@ loginForm.addEventListener("submit", async (e) => {
   }
 });
 
-// RESEND VERIFICATION FORM SUBMISSION
-resendForm.addEventListener("submit", async (e) => {
+// DELETE ACCOUNT FORM SUBMISSION
+deleteAccountForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = document.getElementById("resendEmail").value;
+  const password = document.getElementById("deleteAccountPassword").value;
+
+  if (!confirm("Are you absolutely sure? This cannot be undone.")) return;
 
   try {
-    const res = await fetch(`${API_URL}/auth/resend-verification`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
+    const res = await fetch(`${API_URL}/auth/delete-account`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify({ password }),
     });
+
     const data = await res.json();
-    if (!res.ok) throw new Error(data.message || "Failed to resend");
+    if (!res.ok) throw new Error(data.message || "Failed to delete account");
 
     alert(data.message);
-    resendForm.reset();
-    closeModal(resendModal);
+    localStorage.removeItem("compassUser");
+    localStorage.removeItem("compassToken");
+    deleteAccountForm.reset();
+    closeModal(deleteAccountModal);
+    checkAuthState();
+    loadItems();
   } catch (err) {
-    alert("Error: " + err.message);
+    alert("Could not delete account: " + err.message);
   }
 });
 
