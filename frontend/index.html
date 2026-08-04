@@ -28,6 +28,7 @@
         <div class="auth-logged-in" id="authLoggedIn">
           <span id="userGreeting"></span>
           <button class="btn-link" id="logoutBtn">Log out</button>
+          <button class="btn-link btn-link-danger" id="openDeleteAccountBtn">Delete account</button>
         </div>
       </nav>
     </header>
@@ -347,12 +348,6 @@
           />
           <button type="submit" class="submit-btn">Log in</button>
         </form>
-        <p class="modal-switch">
-          Not verified yet?
-          <button type="button" id="openResendBtn" class="btn-link">
-            Resend verification email
-          </button>
-        </p>
       </div>
     </div>
 
@@ -388,20 +383,31 @@
       </div>
     </div>
 
-    <!-- RESEND VERIFICATION MODAL -->
-    <div class="modal-overlay" id="resendModal">
+    <!-- DELETE ACCOUNT MODAL -->
+    <div class="modal-overlay" id="deleteAccountModal">
       <div class="modal-box">
-        <button class="modal-close" id="closeResend" aria-label="Close">
+        <button class="modal-close" id="closeDeleteAccount" aria-label="Close">
           ✕
         </button>
         <span class="section-eyebrow"
-          ><span class="eyebrow-dot" aria-hidden="true"></span>Almost
-          there</span
+          ><span class="eyebrow-dot" aria-hidden="true"></span>This can't be
+          undone</span
         >
-        <h2>Resend Verification</h2>
-        <form id="resendForm">
-          <input type="email" id="resendEmail" placeholder="Email" required />
-          <button type="submit" class="submit-btn">Resend email</button>
+        <h2>Delete Account</h2>
+        <p class="modal-warning">
+          This permanently deletes your account. Your posted items will
+          remain, but you'll no longer be able to manage them.
+        </p>
+        <form id="deleteAccountForm">
+          <input
+            type="password"
+            id="deleteAccountPassword"
+            placeholder="Confirm your password"
+            required
+          />
+          <button type="submit" class="submit-btn submit-btn-danger">
+            Permanently delete my account
+          </button>
         </form>
       </div>
     </div>
