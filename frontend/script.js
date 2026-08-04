@@ -1,4 +1,4 @@
-const API_URL = "https://compass-riu7.onrender.com";
+const API_URL = "https://compass-riu7.onrender.com/api";
 
 // DOM Elements - Form & Grid
 const itemForm = document.getElementById("itemForm");
