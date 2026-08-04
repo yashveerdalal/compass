@@ -1,3 +1,5 @@
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first'); // Node 18+
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
