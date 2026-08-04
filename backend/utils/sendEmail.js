@@ -6,11 +6,11 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  family: 4,
 });
 
 const sendVerificationEmail = async (to, token) => {
-  const verifyUrl = `http://localhost:5050/api/auth/verify/${token}`;
-
+  const verifyUrl = `https://compass-riu7.onrender.com/api/auth/verify/${token}`;
   await transporter.sendMail({
     from: `"Compass 🧭" <${process.env.EMAIL_USER}>`,
     to,
