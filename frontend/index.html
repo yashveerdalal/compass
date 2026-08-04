@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compass — Find Your Way Back</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">
+        <span class="logo-dot" aria-hidden="true"></span>Compass
+      </div>
+      <nav>
+        <a href="#feed" class="nav-link">Browse</a>
+        <div class="auth-logged-out" id="authLoggedOut">
+          <button class="btn-link" id="openLoginBtn">Log in</button>
+          <button class="btn btn-lost btn-sm" id="openRegisterBtn">
+            Sign up
+          </button>
+        </div>
+        <div class="auth-logged-in" id="authLoggedIn">
+          <span id="userGreeting"></span>
+          <button class="btn-link" id="logoutBtn">Log out</button>
+        </div>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-beacon" aria-hidden="true"></div>
+      <div class="hero-content">
+        <span class="eyebrow"
+          ><span class="eyebrow-dot" aria-hidden="true"></span>A single place to
+          report what's lost and found</span
+        >
+        <h1>Find your way <em>back</em> to what's yours.</h1>
+        <p>
+          Post a lost or found item, and let the people around you help you get
+          it back.
+        </p>
+        <div class="hero-actions">
+          <a href="#report" class="btn btn-lost">Report an item</a>
+          <a href="#feed" class="btn btn-ghost">Browse reports</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="report-section" id="report">
+      <div class="section-head">
+        <span class="section-eyebrow"
+          ><span class="eyebrow-dot" aria-hidden="true"></span>01 — Tell us what
+          happened</span
+        >
+        <h2>Report a Lost or Found Item</h2>
+      </div>
+
+      <!-- Default state: nothing but a choice. The full form stays hidden until one is picked. -->
+      <div class="report-intro" id="reportIntro">
+        <p class="report-intro-copy">
+          Pick one to start — it takes about a minute.
+        </p>
+        <div class="report-intro-actions">
+          <button
+            type="button"
+            class="choice-card choice-lost"
+            id="startLostBtn"
+          >
+            <span class="choice-icon">🔍</span>
+            <span class="choice-title">I lost something</span>
+            <span class="choice-sub">Report it missing</span>
+          </button>
+          <button
+            type="button"
+            class="choice-card choice-found"
+            id="startFoundBtn"
+          >
+            <span class="choice-icon">📦</span>
+            <span class="choice-title">I found something</span>
+            <span class="choice-sub">Help it get back home</span>
+          </button>
+        </div>
+        <p class="report-intro-note" id="reportAuthNote" hidden>
+          You'll need to
+          <button type="button" class="btn-link" id="reportLoginLink">
+            log in
+          </button>
+          first — it only takes a second.
+        </p>
+      </div>
+
+      <form id="itemForm" hidden>
+        <button
+          type="button"
+          class="back-link form-cancel"
+          id="cancelReportBtn"
+        >
+          ← Start over
+        </button>
+
+        <div class="status-toggle">
+          <div class="toggle-pill" aria-hidden="true"></div>
+          <label
+            ><input type="radio" name="status" value="lost" checked /><span
+              >Lost Item</span
+            ></label
+          >
+          <label
+            ><input type="radio" name="status" value="found" /><span
+              >Found Item</span
+            ></label
+          >
+        </div>
+
+        <!-- CATEGORY PICKER -->
+        <div class="category-picker" id="categoryPicker">
+          <div class="wizard-progress" id="wizardProgress">
+            <span class="progress-dot active" data-dot="1"></span>
+            <span class="progress-dot" data-dot="2"></span>
+          </div>
+
+          <!-- STEP 1: category -->
+          <div class="wizard-step" id="step1" data-step="1">
+            <label class="picker-label">What kind of item is it?</label>
+            <div class="category-cards" id="categoryCards">
+              <button
+                type="button"
+                class="category-card"
+                data-category="Electronics"
+              >
+                <span class="category-card-icon">💻</span>
+                <span class="category-card-name">Electronics</span>
+              </button>
+              <button
+                type="button"
+                class="category-card"
+                data-category="Bag / Wallet"
+              >
+                <span class="category-card-icon">🎒</span>
+                <span class="category-card-name">Bag / Wallet</span>
+              </button>
+              <button
+                type="button"
+                class="category-card"
+                data-category="Documents / ID"
+              >
+                <span class="category-card-icon">📄</span>
+                <span class="category-card-name">Documents / ID</span>
+              </button>
+              <button type="button" class="category-card" data-category="Keys">
+                <span class="category-card-icon">🔑</span>
+                <span class="category-card-name">Keys</span>
+              </button>
+              <button type="button" class="category-card" data-category="Other">
+                <span class="category-card-icon">🗂️</span>
+                <span class="category-card-name">Other</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 2a: sub-type (only for Electronics / Bag / Wallet) -->
+          <div class="wizard-step" id="step2Sub" data-step="2" hidden>
+            <label class="picker-label">
+              <button type="button" class="back-link" id="subBackBtn">
+                ← back
+              </button>
+              Narrow it down
+            </label>
+            <div class="subcategory-cards" id="subCategoryCards"></div>
+            <div class="custom-input-row" id="customSubRow" hidden>
+              <input
+                type="text"
+                id="customSubInput"
+                class="custom-input"
+                placeholder="Type the item type"
+              />
+              <button
+                type="button"
+                class="btn btn-lost btn-sm"
+                id="subContinueBtn"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 2b: describe (Documents / Keys / Other) -->
+          <div class="wizard-step" id="step2Describe" data-step="2" hidden>
+            <label class="picker-label">
+              <button type="button" class="back-link" id="describeBackBtn">
+                ← back
+              </button>
+              What is it, exactly?
+            </label>
+            <div class="custom-input-row">
+              <input
+                type="text"
+                id="customDescribeInput"
+                class="custom-input"
+                placeholder="e.g. Student ID card, House keys, Umbrella..."
+              />
+              <button
+                type="button"
+                class="btn btn-lost btn-sm"
+                id="describeContinueBtn"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+
+          <!-- Summary chip, shown once the wizard is complete. "change" reopens step 1
+               so the person can pick a different category without restarting the whole form. -->
+          <div class="wizard-summary" id="wizardSummary" hidden>
+            <span class="summary-icon" id="summaryIcon"></span>
+            <span class="summary-text" id="summaryText"></span>
+            <button type="button" class="back-link" id="summaryChangeBtn">
+              change
+            </button>
+          </div>
+
+          <input type="hidden" name="category" id="categoryInput" />
+          <input type="hidden" name="subCategory" id="subCategoryInput" />
+        </div>
+
+        <!-- Rest of the form stays hidden until category + sub-type are chosen -->
+        <div class="rest-of-form" id="restOfForm" hidden>
+          <div class="form-grid">
+            <input
+              type="text"
+              name="itemName"
+              placeholder="Item name / short title"
+              required
+            />
+            <input type="text" name="color" placeholder="Color" />
+            <input
+              type="text"
+              name="city"
+              id="cityInput"
+              placeholder="City"
+              required
+            />
+            <input
+              type="text"
+              name="reporterName"
+              placeholder="Your name"
+              required
+            />
+            <input
+              type="text"
+              name="contactInfo"
+              placeholder="Phone or email"
+              required
+            />
+            <label class="file-field" id="photoField">
+              <input
+                type="file"
+                name="photo"
+                accept="image/*"
+                id="photoInput"
+              />
+              <span class="file-field-label" id="fileFieldLabel"
+                >📷 Add a photo</span
+              >
+              <img
+                class="photo-preview"
+                id="photoPreview"
+                alt="Photo preview"
+                hidden
+              />
+            </label>
+          </div>
+
+          <textarea
+            name="description"
+            placeholder="Description (distinguishing marks, last seen location, etc.)"
+          ></textarea>
+
+          <input type="hidden" name="lat" id="latInput" />
+          <input type="hidden" name="lng" id="lngInput" />
+
+          <div class="locate-row">
+            <button type="button" id="locateBtn">
+              📍 Use my current location
+            </button>
+            <span id="locationStatus"></span>
+          </div>
+
+          <button type="submit" class="submit-btn">Submit report</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="feed-section" id="feed">
+      <div class="section-head">
+        <span class="section-eyebrow"
+          ><span class="eyebrow-dot" aria-hidden="true"></span>02 — See what's
+          been reported</span
+        >
+        <h2>Recent Reports</h2>
+      </div>
+
+      <div class="filters">
+        <input type="text" id="filterCity" placeholder="Filter by city" />
+        <select id="filterStatus">
+          <option value="">All statuses</option>
+          <option value="lost">Lost</option>
+          <option value="found">Found</option>
+        </select>
+        <button id="filterBtn" class="btn btn-ghost btn-sm">Filter</button>
+        <button id="nearMeBtn" class="btn-outline">📍 Show near me</button>
+      </div>
+
+      <div class="item-grid" id="itemGrid"></div>
+    </section>
+
+    <footer>
+      <p>
+        <span class="logo-dot" aria-hidden="true"></span>Compass © 2026 —
+        Reuniting people with their things.
+      </p>
+    </footer>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal-overlay" id="loginModal">
+      <div class="modal-box">
+        <button class="modal-close" id="closeLogin" aria-label="Close">
+          ✕
+        </button>
+        <span class="section-eyebrow"
+          ><span class="eyebrow-dot" aria-hidden="true"></span>Welcome
+          back</span
+        >
+        <h2>Log In</h2>
+        <form id="loginForm">
+          <input type="email" id="loginEmail" placeholder="Email" required />
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            required
+          />
+          <button type="submit" class="submit-btn">Log in</button>
+        </form>
+        <p class="modal-switch">
+          Not verified yet?
+          <button type="button" id="openResendBtn" class="btn-link">
+            Resend verification email
+          </button>
+        </p>
+      </div>
+    </div>
+
+    <!-- REGISTER MODAL -->
+    <div class="modal-overlay" id="registerModal">
+      <div class="modal-box">
+        <button class="modal-close" id="closeRegister" aria-label="Close">
+          ✕
+        </button>
+        <span class="section-eyebrow"
+          ><span class="eyebrow-dot" aria-hidden="true"></span>Join
+          Compass</span
+        >
+        <h2>Create Account</h2>
+        <form id="registerForm">
+          <input
+            type="text"
+            id="regFullName"
+            placeholder="Full name"
+            required
+          />
+          <input type="tel" id="regPhone" placeholder="Phone number" required />
+          <input type="email" id="regEmail" placeholder="Email" required />
+          <input
+            type="password"
+            id="regPassword"
+            placeholder="Password"
+            minlength="6"
+            required
+          />
+          <button type="submit" class="submit-btn">Sign up</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- RESEND VERIFICATION MODAL -->
+    <div class="modal-overlay" id="resendModal">
+      <div class="modal-box">
+        <button class="modal-close" id="closeResend" aria-label="Close">
+          ✕
+        </button>
+        <span class="section-eyebrow"
+          ><span class="eyebrow-dot" aria-hidden="true"></span>Almost
+          there</span
+        >
+        <h2>Resend Verification</h2>
+        <form id="resendForm">
+          <input type="email" id="resendEmail" placeholder="Email" required />
+          <button type="submit" class="submit-btn">Resend email</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
